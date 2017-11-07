@@ -1,0 +1,26 @@
+[package]
+authors = ["Sanemat <o.gata.ken@gmail.com>"]
+categories = ["development-tools"]
+description = "My slick module"
+include = [
+    "src/**/*",
+    "Cargo.toml",
+    "changelog.md",
+    "readme.md",
+    "license-apache",
+    "license-mit",
+]
+keywords = ["checkstyle"]
+license = "MIT/Apache-2.0"
+name = "gitconfig2json"
+repository = "https://github.com/packsaddle/gitconfig2json/"
+version = "0.0.1"
+
+[badges.appveyor]
+project_name = "packsaddle/gitconfig2json"
+repository = "packsaddle/gitconfig2json"
+
+[badges.travis-ci]
+repository = "packsaddle/gitconfig2json"
+
+[dependencies]
