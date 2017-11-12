@@ -21,7 +21,7 @@ $ cargo install gitconfig2json
 
 ## License
 
-MIT/Apache-2.0 © [Sanemat](sane.jp)
+MIT/Apache-2.0 © [Sanemat](http://sane.jp)
 
 [travis-url]: https://travis-ci.org/packsaddle/rust-gitconfig2json
 [travis-image]: https://img.shields.io/travis/packsaddle/rust-gitconfig2json/master.svg?style=flat-square&label=travis
