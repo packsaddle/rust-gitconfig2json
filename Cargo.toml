@@ -24,3 +24,4 @@ repository = "packsaddle/gitconfig2json"
 repository = "packsaddle/gitconfig2json"
 
 [dependencies]
+serde_json = "1.0.6"
