@@ -1,7 +1,7 @@
 [package]
 authors = ["Sanemat <o.gata.ken@gmail.com>"]
 categories = ["development-tools"]
-description = "My slick module"
+description = "Parse `git config --list --null` for api"
 include = [
     "src/**/*",
     "Cargo.toml",
@@ -13,15 +13,15 @@ include = [
 keywords = ["checkstyle"]
 license = "MIT/Apache-2.0"
 name = "gitconfig2json"
-repository = "https://github.com/packsaddle/gitconfig2json/"
+repository = "https://github.com/packsaddle/rust-gitconfig2json/"
 version = "0.0.1"
 
 [badges.appveyor]
-project_name = "packsaddle/gitconfig2json"
-repository = "packsaddle/gitconfig2json"
+project_name = "sanemat/rust-gitconfig2json"
+repository = "packsaddle/rust-gitconfig2json"
 
 [badges.travis-ci]
-repository = "packsaddle/gitconfig2json"
+repository = "packsaddle/rust-gitconfig2json"
 
 [dependencies]
 serde_json = "1.0.6"
