@@ -144,10 +144,22 @@ mod tests {
 
     #[test]
     fn convert_one() {
-        // {'key': 'value'}
+        // {"key": "value"}
         let mut target = gitconfig::Map::new();
         target.insert("key".to_owned(), gitconfig::Value::String("value".to_owned()));
         let map = gitconfig::Value::Map(target);
+        let converted = convert(map);
+        println!("{}", serde_json::to_string(&converted).unwrap());
+    }
+
+    #[test]
+    fn convert_two() {
+        // {"key1": {"key2": "value2"}}
+        let mut internal = gitconfig::Map::new();
+        internal.insert("key2".to_owned(), gitconfig::Value::String("value2".to_owned()));
+        let mut external = gitconfig::Map::new();
+        external.insert("key1".to_owned(), gitconfig::Value::Map(internal));
+        let map = gitconfig::Value::Map(external);
         let converted = convert(map);
         println!("{}", serde_json::to_string(&converted).unwrap());
     }
