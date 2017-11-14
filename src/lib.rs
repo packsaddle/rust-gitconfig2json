@@ -3,6 +3,7 @@ extern crate serde_json;
 use std::error::Error;
 use std::iter::FromIterator;
 use serde_json::{Value, Map};
+mod gitconfig;
 
 pub fn run(message: &str) -> Result<String, Box<Error>> {
     let git_configs = Vec::from_iter(message.split("\0").map(String::from));
@@ -106,6 +107,15 @@ fn split_once(in_string: &str) -> (&str, &str) {
     (first, second)
 }
 
+fn convert(git_config: gitconfig::Value) -> serde_json::Value {
+    match git_config {
+        gitconfig::Value::String(s) => serde_json::Value::String(s),
+        gitconfig::Value::Map(map) => serde_json::Value::Object(
+            map.into_iter().map(|(k, v)| (k, convert(v))).collect(),
+        ),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -122,5 +132,11 @@ mod tests {
         println!("{}", buf);
         println!("----");
         println!("{:?}", run(buf.as_ref()).unwrap());
+    }
+    #[test]
+    fn convert_empty() {
+        let map = gitconfig::Value::Map(gitconfig::Map::new());
+        let converted = convert(map);
+        println!("{}", serde_json::to_string(&converted).unwrap());
     }
 }
