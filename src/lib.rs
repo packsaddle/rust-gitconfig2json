@@ -133,9 +133,21 @@ mod tests {
         println!("----");
         println!("{:?}", run(buf.as_ref()).unwrap());
     }
+
     #[test]
     fn convert_empty() {
-        let map = gitconfig::Value::Map(gitconfig::Map::new());
+        let target = gitconfig::Map::new();
+        let map = gitconfig::Value::Map(target);
+        let converted = convert(map);
+        println!("{}", serde_json::to_string(&converted).unwrap());
+    }
+
+    #[test]
+    fn convert_one() {
+        // {'key': 'value'}
+        let mut target = gitconfig::Map::new();
+        target.insert("key".to_owned(), gitconfig::Value::String("value".to_owned()));
+        let map = gitconfig::Value::Map(target);
         let converted = convert(map);
         println!("{}", serde_json::to_string(&converted).unwrap());
     }
