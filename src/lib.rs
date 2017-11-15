@@ -146,7 +146,26 @@ mod tests {
     fn convert_one() {
         // {"key": "value"}
         let mut target = gitconfig::Map::new();
-        target.insert("key".to_owned(), gitconfig::Value::String("value".to_owned()));
+        target.insert(
+            "key".to_owned(),
+            gitconfig::Value::String("value".to_owned()),
+        );
+        let map = gitconfig::Value::Map(target);
+        let converted = convert(map);
+        println!("{}", serde_json::to_string(&converted).unwrap());
+    }
+
+    #[test]
+    fn convert_one_another() {
+        // {"key": "value"}
+        let mut target = gitconfig::Map::new();
+        match target.entry("key") {
+            gitconfig::Entry::Occupied(mut occupied) => unimplemented!(),
+            gitconfig::Entry::Vacant(vacant) => {
+                vacant.insert(gitconfig::Value::String("value".to_owned()));
+                ()
+            }
+        }
         let map = gitconfig::Value::Map(target);
         let converted = convert(map);
         println!("{}", serde_json::to_string(&converted).unwrap());
@@ -156,7 +175,10 @@ mod tests {
     fn convert_two() {
         // {"key1": {"key2": "value2"}}
         let mut internal = gitconfig::Map::new();
-        internal.insert("key2".to_owned(), gitconfig::Value::String("value2".to_owned()));
+        internal.insert(
+            "key2".to_owned(),
+            gitconfig::Value::String("value2".to_owned()),
+        );
         let mut external = gitconfig::Map::new();
         external.insert("key1".to_owned(), gitconfig::Value::Map(internal));
         let map = gitconfig::Value::Map(external);
