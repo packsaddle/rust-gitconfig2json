@@ -139,7 +139,7 @@ mod tests {
         let target = gitconfig::Map::new();
         let map = gitconfig::Value::Map(target);
         let converted = convert(map);
-        println!("{}", serde_json::to_string(&converted).unwrap());
+        println!("empty !! {}", serde_json::to_string(&converted).unwrap());
     }
 
     #[test]
@@ -160,8 +160,8 @@ mod tests {
         // {"key": "value"}
         let mut target = gitconfig::Map::new();
         match target.entry("key") {
-            gitconfig::Entry::Occupied(mut occupied) => unimplemented!(),
-            gitconfig::Entry::Vacant(vacant) => {
+            gitconfig::map::Entry::Occupied(mut occupied) => unimplemented!(),
+            gitconfig::map::Entry::Vacant(vacant) => {
                 vacant.insert(gitconfig::Value::String("value".to_owned()));
                 ()
             }
