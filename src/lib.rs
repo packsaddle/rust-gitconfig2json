@@ -110,7 +110,7 @@ fn split_once(in_string: &str) -> (&str, &str) {
 fn convert(git_config: gitconfig::Value) -> serde_json::Value {
     match git_config {
         gitconfig::Value::String(s) => serde_json::Value::String(s),
-        gitconfig::Value::Map(map) => serde_json::Value::Object(
+        gitconfig::Value::Object(map) => serde_json::Value::Object(
             map.into_iter().map(|(k, v)| (k, convert(v))).collect(),
         ),
     }
@@ -137,7 +137,7 @@ mod tests {
     #[test]
     fn convert_empty() {
         let target = gitconfig::Map::new();
-        let map = gitconfig::Value::Map(target);
+        let map = gitconfig::Value::Object(target);
         let converted = convert(map);
         println!("empty !! {}", serde_json::to_string(&converted).unwrap());
     }
@@ -150,7 +150,7 @@ mod tests {
             "key".to_owned(),
             gitconfig::Value::String("value".to_owned()),
         );
-        let map = gitconfig::Value::Map(target);
+        let map = gitconfig::Value::Object(target);
         let converted = convert(map);
         println!("{}", serde_json::to_string(&converted).unwrap());
     }
@@ -166,7 +166,7 @@ mod tests {
                 ()
             }
         }
-        let map = gitconfig::Value::Map(target);
+        let map = gitconfig::Value::Object(target);
         let converted = convert(map);
         println!("{}", serde_json::to_string(&converted).unwrap());
     }
@@ -180,8 +180,8 @@ mod tests {
             gitconfig::Value::String("value2".to_owned()),
         );
         let mut external = gitconfig::Map::new();
-        external.insert("key1".to_owned(), gitconfig::Value::Map(internal));
-        let map = gitconfig::Value::Map(external);
+        external.insert("key1".to_owned(), gitconfig::Value::Object(internal));
+        let map = gitconfig::Value::Object(external);
         let converted = convert(map);
         println!("{}", serde_json::to_string(&converted).unwrap());
     }
