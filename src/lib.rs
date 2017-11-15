@@ -2,8 +2,9 @@ extern crate serde_json;
 
 use std::error::Error;
 use std::iter::FromIterator;
-use serde_json::{Value, Map};
 mod gitconfig;
+use gitconfig::{Value, Map};
+use gitconfig::map::Entry;
 
 pub fn run(message: &str) -> Result<String, Box<Error>> {
     let git_configs = Vec::from_iter(message.split("\0").map(String::from));
@@ -24,20 +25,19 @@ pub fn run(message: &str) -> Result<String, Box<Error>> {
                 ()
             }
             2 => {
-                // TODO: reduce clone
-                let cloned = map.clone();
-                match cloned.get(&split_keys[0]) {
-                    Some(object) => {
-                        // TODO: reduce clone
-                        let mut internal = object.as_object().unwrap().clone();
-                        internal.insert(split_keys[1].to_owned(), Value::String(value.to_owned()));
-                        map.insert(split_keys[0].to_owned(), Value::Object(internal));
+                match map.entry(split_keys[0]) {
+                    Entry::Occupied(mut occupied) => {
+                        occupied.get_mut().as_object_mut().unwrap().insert(
+                            split_keys[1]
+                                .to_owned(),
+                            Value::String(
+                                value.to_owned(),
+                            ),
+                        );
                         ()
                     }
-                    None => {
-                        let mut internal = Map::new();
-                        internal.insert(split_keys[1].to_owned(), Value::String(value.to_owned()));
-                        map.insert(split_keys[0].to_owned(), Value::Object(internal));
+                    Entry::Vacant(vacant) => {
+                        vacant.insert(Value::String(value.to_owned()));
                         ()
                     }
                 }
