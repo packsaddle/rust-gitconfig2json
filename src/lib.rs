@@ -5,18 +5,27 @@ use std::error::Error;
 use gitconfig::Value;
 
 pub fn run(message: &str) -> Result<String, Box<Error>> {
-    match serde_json::to_string(&convert(message.parse()?)) {
+    match serde_json::to_string(&(message.parse::<Value>()?).to_json_value()) {
         Ok(t) => Ok(t),
         Err(e) => Err(Box::new(e)),
     }
 }
 
-fn convert(git_config: Value) -> serde_json::Value {
-    match git_config {
-        Value::String(s) => serde_json::Value::String(s),
-        Value::Object(map) => serde_json::Value::Object(
-            map.into_iter().map(|(k, v)| (k, convert(v))).collect(),
-        ),
+pub trait ToJsonable {
+    fn to_json_value(&self) -> serde_json::Value;
+}
+
+impl ToJsonable for Value {
+    fn to_json_value(&self) -> serde_json::Value {
+        match *self {
+            Value::String(ref s) => serde_json::Value::String(s.to_owned()),
+            Value::Object(ref map) => serde_json::Value::Object(
+                map.clone()
+                    .into_iter()
+                    .map(|(k, v)| (k, v.to_json_value()))
+                    .collect(),
+            ),
+        }
     }
 }
 
@@ -44,8 +53,10 @@ mod tests {
     fn convert_empty() {
         let target = Map::new();
         let map = Value::Object(target);
-        let converted = convert(map);
-        println!("empty !! {}", serde_json::to_string(&converted).unwrap());
+        println!(
+            "empty !! {}",
+            serde_json::to_string(&map.to_json_value()).unwrap()
+        );
     }
 
     #[test]
@@ -54,8 +65,7 @@ mod tests {
         let mut target = Map::new();
         target.insert("key".to_owned(), Value::String("value".to_owned()));
         let map = Value::Object(target);
-        let converted = convert(map);
-        println!("{}", serde_json::to_string(&converted).unwrap());
+        println!("{}", serde_json::to_string(&map.to_json_value()).unwrap());
     }
 
     #[test]
@@ -70,8 +80,7 @@ mod tests {
             }
         }
         let map = Value::Object(target);
-        let converted = convert(map);
-        println!("{}", serde_json::to_string(&converted).unwrap());
+        println!("{}", serde_json::to_string(&map.to_json_value()).unwrap());
     }
 
     #[test]
@@ -82,7 +91,6 @@ mod tests {
         let mut external = Map::new();
         external.insert("key1".to_owned(), Value::Object(internal));
         let map = Value::Object(external);
-        let converted = convert(map);
-        println!("{}", serde_json::to_string(&converted).unwrap());
+        println!("{}", serde_json::to_string(&map.to_json_value()).unwrap());
     }
 }
