@@ -1,7 +1,7 @@
 extern crate serde_json;
+extern crate gitconfig;
 
 use std::error::Error;
-mod gitconfig;
 use gitconfig::{Value, Map};
 use gitconfig::map::Entry;
 
