@@ -1,7 +1,7 @@
 [package]
 authors = ["Sanemat <o.gata.ken@gmail.com>"]
 categories = ["development-tools"]
-description = "Parse `git config --list --null` for api"
+description = "Parse `git config --list --null` using gitconfig::Value for api"
 include = [
     "src/**/*",
     "Cargo.toml",
