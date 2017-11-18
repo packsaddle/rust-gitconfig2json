@@ -2,8 +2,9 @@
 
 [![crates version][crates-image]][crates-url] [![Travis-CI Status][travis-image]][travis-url] [![Appveyor Status][appveyor-image]][appveyor-url] ![license][license-image]
 
-> Parse `git config --list --null` for api
+> Parse `git config --list --null` using gitconfig::Value for api
 
+See [gitconfig](https://github.com/packsaddle/rust-gitconfig) a simple module.
 See [gitconfig2json_cli](https://github.com/packsaddle/rust-gitconfig2json_cli) CLI for this module.
 
 ## Example
