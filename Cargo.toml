@@ -14,7 +14,7 @@ keywords = ["git"]
 license = "MIT/Apache-2.0"
 name = "gitconfig2json"
 repository = "https://github.com/packsaddle/rust-gitconfig2json/"
-version = "0.3.0"
+version = "0.3.1"
 
 [badges.appveyor]
 project_name = "sanemat/rust-gitconfig2json"
