@@ -50,27 +50,24 @@ mod tests {
     }
 
     #[test]
-    fn convert_empty() {
+    fn to_json_value_empty() {
         let target = Map::new();
         let map = Value::Object(target);
-        println!(
-            "empty !! {}",
-            serde_json::to_string(&map.to_json_value()).unwrap()
-        );
+        let expected: serde_json::Value = serde_json::from_str("{}").unwrap();
+        assert_eq!(map.to_json_value(), expected);
     }
 
     #[test]
-    fn convert_one() {
-        // {"key": "value"}
+    fn to_json_value_one() {
         let mut target = Map::new();
         target.insert("key".to_owned(), Value::String("value".to_owned()));
         let map = Value::Object(target);
-        println!("{}", serde_json::to_string(&map.to_json_value()).unwrap());
+        let expected: serde_json::Value = serde_json::from_str(r#"{"key": "value"}"#).unwrap();
+        assert_eq!(map.to_json_value(), expected);
     }
 
     #[test]
-    fn convert_one_another() {
-        // {"key": "value"}
+    fn to_json_value_one_another_way() {
         let mut target = Map::new();
         match target.entry("key") {
             Entry::Occupied(_) => unimplemented!(),
@@ -80,17 +77,19 @@ mod tests {
             }
         }
         let map = Value::Object(target);
-        println!("{}", serde_json::to_string(&map.to_json_value()).unwrap());
+        let expected: serde_json::Value = serde_json::from_str(r#"{"key": "value"}"#).unwrap();
+        assert_eq!(map.to_json_value(), expected);
     }
 
     #[test]
-    fn convert_two() {
-        // {"key1": {"key2": "value2"}}
+    fn to_json_value_nested() {
         let mut internal = Map::new();
         internal.insert("key2".to_owned(), Value::String("value2".to_owned()));
         let mut external = Map::new();
         external.insert("key1".to_owned(), Value::Object(internal));
         let map = Value::Object(external);
-        println!("{}", serde_json::to_string(&map.to_json_value()).unwrap());
+        let expected: serde_json::Value = serde_json::from_str(r#"{"key1": {"key2": "value2"}}"#)
+            .unwrap();
+        assert_eq!(map.to_json_value(), expected);
     }
 }
